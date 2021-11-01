@@ -1,11 +1,49 @@
-import React from 'react';
-
+import React, { useReducer } from 'react';
+import reducer, { initialState } from './reducers';
 import './App.css';
-
+import * as actions from './actions';
 import TotalDisplay from './components/TotalDisplay';
 import CalcButton from './components/CalcButton';
+import { text } from 'body-parser';
 
 function App() {
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const handleNumberClick = e => {
+    const { textContent } = e.target;
+    dispatch(
+      actions.applyNumber(
+        parseInt(textContent)
+        )
+      );
+  };
+  const handleOperationClick = e => {
+    const { textContent } = e.target;
+    dispatch(
+      actions.changeOperation(textContent)
+      );
+  };
+  const handleClearClick = () => {
+    dispatch(
+      actions.clearDisplay()
+    );
+  };
+  const handleSaveMemoryClick = () => {
+    dispatch(
+      actions.saveMemory()
+    );
+  };
+  const handleApplyMemoryClick = () => {
+    dispatch(
+      actions.applyMemory()
+    )
+  };
+  const handleClearMemoryClick = () => {
+    dispatch(
+      actions.clearMemory()
+    )
+  };
 
   return (
     <div className="App">
@@ -17,44 +55,44 @@ function App() {
         <div className="col-md-12 d-flex justify-content-center">
           <form name="Cal">
             
-            <TotalDisplay value={0}/>
+            <TotalDisplay value={state.total}/>
             <div className="row details">
-              <span id="operation"><b>Operation:</b> X</span>
-              <span id="memory"><b>Memory:</b> 0</span>
+              <span id="operation"><b>Operation:</b> {state.operation}</span>
+              <span id="memory"><b>Memory:</b> {state.memory}</span>
             </div>
             
             <div className="row">
-              <CalcButton value={"M+"}/>
-              <CalcButton value={"MR"}/>
-              <CalcButton value={"MC"}/>
+              <CalcButton onClick={handleSaveMemoryClick} value={"M+"}/>
+              <CalcButton onClick={handleApplyMemoryClick} value={"MR"}/>
+              <CalcButton onClick={handleClearMemoryClick} value={"MC"}/>
             </div>
 
             <div className="row">
-              <CalcButton value={1}/>
-              <CalcButton value={2}/>
-              <CalcButton value={3}/>
+              <CalcButton onClick={handleNumberClick} value={1}/>
+              <CalcButton onClick={handleNumberClick} value={2}/>
+              <CalcButton onClick={handleNumberClick} value={3}/>
             </div>
 
             <div className="row">
-              <CalcButton value={4}/>
-              <CalcButton value={5}/>
-              <CalcButton value={6}/>
+              <CalcButton onClick={handleNumberClick} value={4}/>
+              <CalcButton onClick={handleNumberClick} value={5}/>
+              <CalcButton onClick={handleNumberClick} value={6}/>
             </div>
 
             <div className="row">
-              <CalcButton value={7}/>
-              <CalcButton value={8}/>
-              <CalcButton value={9}/>
+              <CalcButton onClick={handleNumberClick} value={7}/>
+              <CalcButton onClick={handleNumberClick} value={8}/>
+              <CalcButton onClick={handleNumberClick} value={9}/>
             </div>
 
             <div className="row">
-              <CalcButton value={"+"}/>
-              <CalcButton value={"*"}/>
-              <CalcButton value={"-"}/>
+              <CalcButton onClick={handleOperationClick} value={"+"}/>
+              <CalcButton onClick={handleOperationClick} value={"*"}/>
+              <CalcButton onClick={handleOperationClick} value={"-"}/>
             </div>
 
             <div className="row ce_button">
-              <CalcButton value={"CE"}/>
+              <CalcButton onClick={handleClearClick} value={"CE"}/>
             </div>
 
           </form>
